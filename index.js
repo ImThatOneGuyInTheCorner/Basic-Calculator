@@ -39,23 +39,73 @@ document.addEventListener("DOMContentLoaded", () => {
     let num = document.getElementById('num');
     let ops = document.getElementById('ops');
     let equate = document.getElementById('equate');
+    let c = document.getElementById('clear');
+    let n1 = '';
+    let op = '';
+    let n2 = '';
     if(num !== null && outCont !== null) {
-        addListener(num, outCont);
+        carryToListener(num, outCont);
     }
-    if(num !== null && outCont !== null) {
-        // To Function that adds event listeners for click
+    if(ops !== null && outCont !== null) {
+        carryToListener(ops, outCont);
     }
     if(equate !== null && outCont !== null) {
-        // To Function that adds event listeners for click
+        carryToListener(equate, outCont);
+    }
+    if(c !== null && outCont !== null) {
+        carryToListener(c, outCont);
     }
 })
 
-function addListener(btnCont, outCont) {
+function carryToListener(btnCont, outCont) {
+    if(btnCont.id == "equate" || btnCont.id == "clear") {
+        addListener(btnCont, outCont);
+    }
     for(i = 0; i < btnCont.children.length; i++) {
-        btnCont.children[i].addEventListener('click', go(btnCont.children[i].value)) 
+        addListener(btnCont.children[i], outCont);
     }
 }
 
-function go(val) {
-    alert(val);
+function addListener(btn, outCont) {
+    btn.addEventListener('click', () => {
+        if(btn.id == "clear") {
+            n1 = '';
+            op = '';
+            n2 = '';
+            outCont.value = '';
+        }
+        if(btn.parentElement.id == "num") {outCont.value += btn.innerText;}
+        if(btn.parentElement.id == "ops") {
+            op = btn.innerText;
+            n1 = outCont.value;
+            outCont.value = '';
+        }
+        if(btn.id == "equate") {
+            n2 = outCont.value;
+            mathamaticals(n1,op,n2,outCont);
+        }
+        
+    })
+}
+
+function mathamaticals(n1,op,n2,outCont) {
+    n1 = parseFloat(n1);
+    n2 = parseFloat(n2);
+    switch (op) {
+        case '+':
+            outCont.value = (n1+n2);
+            break;
+        case '-':
+            outCont.value = (n1-n2);
+            break;
+        case '*':
+            outCont.value = (n1*n2);
+            break; 
+        case '/':
+            outCont.value = (n1/n2);
+            break;
+        default:
+            outCont.value = ("(Error: 01) Try clearing and retyping equation");
+            return '';
+      }
 }
